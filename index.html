@@ -155,6 +155,7 @@
       white-space: nowrap;
     }
     .edit-prices:hover { background: var(--green-dark); }
+    .edit-prices[hidden] { display: none; }
     .currency-setting { display: flex; align-items: center; gap: 7px; }
     .currency-setting[hidden] { display: none; }
     .currency-setting label { color: var(--muted); font-size: 11px; }
@@ -310,7 +311,8 @@
         <div class="menu-tools">
           <label for="dish-search" class="visually-hidden"></label>
           <input class="search" id="dish-search" type="search" placeholder="ابحث عن طبق..." aria-label="ابحث عن طبق">
-          <button class="edit-prices" id="edit-prices" type="button">تعديل الأسعار</button>
+          <button class="edit-prices" id="auth-button" type="button">تسجيل دخول المالك</button>
+          <button class="edit-prices" id="edit-prices" type="button" hidden>تعديل الأسعار</button>
           <div class="currency-setting" id="currency-setting" hidden>
             <label for="currency">العملة</label>
             <input class="currency-input" id="currency" type="text" maxlength="8" placeholder="مثال: ل.س">
@@ -355,17 +357,34 @@
     </div>
   </footer>
 
-  <script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { doc, getDoc, getFirestore, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const firebaseApp = initializeApp({
+      apiKey: "AIzaSyDeCImOtZNKSXpzumRRYQpmXX-f0KbtdLY",
+      authDomain: "rawabi-hama-menu.firebaseapp.com",
+      projectId: "rawabi-hama-menu",
+      storageBucket: "rawabi-hama-menu.firebasestorage.app",
+      messagingSenderId: "343881813214",
+      appId: "1:343881813214:web:053822e1c5aace770d864f"
+    });
+    const auth = getAuth(firebaseApp);
+    const database = getFirestore(firebaseApp);
+    const ownerEmail = "tomasmuller112001@gmail.com";
+    const pricesDocument = doc(database, "menu", "public");
     const filters = document.querySelectorAll(".filter");
     const dishGrid = document.querySelector("#dish-grid");
     const search = document.querySelector("#dish-search");
     const noResults = document.querySelector("#no-results");
+    const authButton = document.querySelector("#auth-button");
     const editPricesButton = document.querySelector("#edit-prices");
     const currencySetting = document.querySelector("#currency-setting");
     const currencyInput = document.querySelector("#currency");
     const priceStatus = document.querySelector("#price-status");
-    const priceStorageKey = "rawabi-hama-menu-prices";
     const defaultCurrency = "ل.س.ج";
+    let ownerSignedIn = false;
     const defaultPrices = {
       "meat-kebab:0": "2750",
       "meat-shaqaf:0": "3000",
@@ -515,7 +534,7 @@
       editingPrices = enabled;
       currencySetting.hidden = !enabled;
       editPricesButton.textContent = enabled ? "حفظ الأسعار" : "تعديل الأسعار";
-      priceStatus.textContent = enabled ? "الأسعار تُحفظ على هذا الجهاز فقط." : "";
+      priceStatus.textContent = enabled ? "تعديل الأسعار المشتركة لجميع الزوار." : "";
 
       priceLabels.forEach((priceLabel) => {
         if (enabled) {
@@ -573,12 +592,13 @@
 
     renderMenu();
 
-    try {
-      const savedPrices = JSON.parse(localStorage.getItem(priceStorageKey) || "null");
-      if (savedPrices && savedPrices.prices && typeof savedPrices.prices === "object") {
-        currencyInput.value = typeof savedPrices.currency === "string" ? savedPrices.currency : defaultCurrency;
+    priceLabels.forEach(displayPrice);
+
+    function applySharedPrices(data) {
+      if (data && data.prices && typeof data.prices === "object") {
+        currencyInput.value = typeof data.currency === "string" ? data.currency : defaultCurrency;
         priceLabels.forEach((priceLabel) => {
-          const value = savedPrices.prices[priceLabel.dataset.priceKey];
+          const value = data.prices[priceLabel.dataset.priceKey];
           if (typeof value === "string" && value !== "" && Number.isFinite(Number(value)) && Number(value) >= 0) {
             priceLabel.dataset.price = value;
           } else if (value === "") {
@@ -587,14 +607,44 @@
           displayPrice(priceLabel);
         });
       }
-    } catch (error) {
-      console.error("تعذّر تحميل الأسعار المحفوظة.", error);
-      priceStatus.textContent = "تعذّر تحميل الأسعار المحفوظة من هذا الجهاز.";
     }
 
-    if (!priceStatus.textContent) {
-      priceLabels.forEach(displayPrice);
+    async function loadSharedPrices() {
+      try {
+        const snapshot = await getDoc(pricesDocument);
+        if (snapshot.exists()) {
+          applySharedPrices(snapshot.data());
+        }
+      } catch (error) {
+        console.error("تعذّر تحميل الأسعار المشتركة من Firestore.", error);
+        priceStatus.textContent = "تعذّر تحميل الأسعار المشتركة. أعد تحميل الصفحة أو تواصل مع المطعم.";
+      }
     }
+
+    authButton.addEventListener("click", async () => {
+      try {
+        if (auth.currentUser) {
+          await signOut(auth);
+        } else {
+          await signInWithPopup(auth, new GoogleAuthProvider());
+        }
+      } catch (error) {
+        console.error("تعذّر تسجيل الدخول أو الخروج.", error);
+        priceStatus.textContent = "تعذّر تسجيل الدخول. تحقق من اتصالك وحاول مجددًا.";
+      }
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      ownerSignedIn = Boolean(user && user.email === ownerEmail && user.emailVerified);
+      editPricesButton.hidden = !ownerSignedIn;
+      authButton.textContent = user ? "تسجيل الخروج" : "تسجيل دخول المالك";
+      if (user && !ownerSignedIn) {
+        priceStatus.textContent = "هذا الحساب غير مخوّل بتعديل الأسعار.";
+      } else if (!editingPrices) {
+        priceStatus.textContent = "";
+      }
+      await loadSharedPrices();
+    });
 
     function updateMenu() {
       const query = search.value.trim().toLocaleLowerCase("ar");
@@ -627,6 +677,10 @@
     search.addEventListener("input", updateMenu);
 
     editPricesButton.addEventListener("click", () => {
+      if (!ownerSignedIn) {
+        priceStatus.textContent = "يجب تسجيل الدخول بحساب المالك لتعديل الأسعار.";
+        return;
+      }
       if (!editingPrices) {
         setPriceEditing(true);
         return;
@@ -640,17 +694,26 @@
       }
 
       const prices = Object.fromEntries(priceLabels.map((priceLabel, index) => [priceLabel.dataset.priceKey, values[index]]));
-      try {
-        localStorage.setItem(priceStorageKey, JSON.stringify({ prices, currency: currencyInput.value.trim() }));
-        priceLabels.forEach((priceLabel) => {
-          priceLabel.dataset.price = prices[priceLabel.dataset.priceKey];
-        });
-        setPriceEditing(false);
-        priceStatus.textContent = "تم حفظ الأسعار على هذا الجهاز.";
-      } catch (error) {
-        console.error("تعذّر حفظ الأسعار.", error);
-        priceStatus.textContent = "تعذّر حفظ الأسعار. تحقق من إعدادات المتصفح.";
-      }
+      editPricesButton.disabled = true;
+      (async () => {
+        try {
+          await setDoc(pricesDocument, {
+            prices,
+            currency: currencyInput.value.trim(),
+            updatedAt: serverTimestamp()
+          });
+          priceLabels.forEach((priceLabel) => {
+            priceLabel.dataset.price = prices[priceLabel.dataset.priceKey];
+          });
+          setPriceEditing(false);
+          priceStatus.textContent = "تم حفظ الأسعار المشتركة بنجاح.";
+        } catch (error) {
+          console.error("تعذّر حفظ الأسعار المشتركة في Firestore.", error);
+          priceStatus.textContent = "تعذّر حفظ الأسعار المشتركة. تحقق من الصلاحيات والاتصال.";
+        } finally {
+          editPricesButton.disabled = false;
+        }
+      })();
     });
   </script>
 </body>
