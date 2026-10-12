@@ -365,6 +365,80 @@
     const currencyInput = document.querySelector("#currency");
     const priceStatus = document.querySelector("#price-status");
     const priceStorageKey = "rawabi-hama-menu-prices";
+    const defaultCurrency = "ل.س.ج";
+    const defaultPrices = {
+      "meat-kebab:0": "2750",
+      "meat-shaqaf:0": "3000",
+      "meat-majuka:0": "800",
+      "meat-khashkhash:0": "3000",
+      "meat-rawabi:0": "3000",
+      "meat-saraya:0": "3000",
+      "meat-hindi:0": "3000",
+      "meat-siniya:0": "3000",
+      "meat-souda:0": "1700",
+      "meat-marina:0": "3000",
+      "meat-toshka:0": "800",
+      "chicken-tawook:0": "1000",
+      "chicken-kebab-grilled:0": "900",
+      "chicken-wings:0": "650",
+      "shawarma-khartousha:0": "0150",
+      "shawarma-ordinary:0": "200",
+      "shawarma-double:0": "300",
+      "shawarma-double:1": "250",
+      "shawarma-extra:0": "350",
+      "shawarma-meal:0": "450",
+      "shawarma-double-meal:0": "800",
+      "shawarma-kilo:0": "1500",
+      "western-crispy:0": "500",
+      "western-crispy:1": "350",
+      "western-crispy:2": "750",
+      "western-schnitzel:0": "500",
+      "western-schnitzel:1": "350",
+      "western-schnitzel:2": "750",
+      "western-fajita:0": "500",
+      "western-fajita:1": "350",
+      "western-fajita:2": "750",
+      "western-piccata:0": "500",
+      "western-piccata:1": "350",
+      "western-piccata:2": "750",
+      "western-burger-beef:0": "600",
+      "western-burger-chicken:0": "400",
+      "western-zinger:0": "600",
+      "western-zinger:1": "400",
+      "western-zinger:2": "850",
+      "pastry-lahm-bajin:0": "3000",
+      "pastry-lahm-bajin:1": "1250",
+      "pastry-sfiha:0": "3000",
+      "pastry-sfiha:1": "1400",
+      "pastry-sfiha-shamiya:0": "3000",
+      "pastry-sfiha-shamiya:1": "1400",
+      "cold-hummus:0": "300",
+      "cold-hummus-beiruti:0": "350",
+      "cold-moutabal:0": "300",
+      "cold-baba-ghanouj:0": "300",
+      "cold-fattoush:0": "180",
+      "cold-fattoush:1": "320",
+      "cold-tabbouleh:0": "180",
+      "cold-tabbouleh:1": "320",
+      "cold-rocket-salad:0": "180",
+      "cold-rocket-salad:1": "320",
+      "cold-armenian-salad:0": "180",
+      "cold-armenian-salad:1": "320",
+      "cold-fattoush-naem:0": "180",
+      "cold-fattoush-naem:1": "320",
+      "cold-corn-salad:0": "180",
+      "cold-corn-salad:1": "320",
+      "cold-kibbeh-niyeh:0": "600",
+      "hot-fries:0": "100",
+      "hot-fries:1": "150",
+      "hot-fries:2": "0200",
+      "hot-potato-bechamel:0": "450",
+      "hot-potato-coriander:0": "350",
+      "hot-potato-spicy:0": "350",
+      "hot-esh-el-bulbul:0": "70",
+      "hot-kibbeh-grilled:0": "100",
+      "hot-kibbeh-fried:0": "70"
+    };
     const menuItems = [
       { id: "meat-kebab", category: "meat", name: "كباب" },
       { id: "meat-shaqaf", category: "meat", name: "شقف" },
@@ -462,6 +536,7 @@
     }
 
     function renderMenu() {
+      currencyInput.value = defaultCurrency;
       menuItems.forEach((item) => {
         const card = document.createElement("article");
         card.className = "menu-card";
@@ -484,7 +559,7 @@
           price.dataset.priceKey = `${item.id}:${index}`;
           price.dataset.itemName = item.name;
           price.dataset.variant = variant;
-          price.dataset.price = "";
+          price.dataset.price = defaultPrices[price.dataset.priceKey] || "";
           price.textContent = "أضف السعر";
           priceLabels.push(price);
           option.append(label, price);
@@ -501,11 +576,13 @@
     try {
       const savedPrices = JSON.parse(localStorage.getItem(priceStorageKey) || "null");
       if (savedPrices && savedPrices.prices && typeof savedPrices.prices === "object") {
-        currencyInput.value = typeof savedPrices.currency === "string" ? savedPrices.currency : "";
+        currencyInput.value = typeof savedPrices.currency === "string" ? savedPrices.currency : defaultCurrency;
         priceLabels.forEach((priceLabel) => {
           const value = savedPrices.prices[priceLabel.dataset.priceKey];
           if (typeof value === "string" && value !== "" && Number.isFinite(Number(value)) && Number(value) >= 0) {
             priceLabel.dataset.price = value;
+          } else if (value === "") {
+            priceLabel.dataset.price = "";
           }
           displayPrice(priceLabel);
         });
