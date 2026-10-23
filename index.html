@@ -609,6 +609,82 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
     }
+    .hero {
+      background:
+        linear-gradient(90deg, rgba(22, 39, 29, .08) 0%, rgba(22, 39, 29, .9) 72%),
+        url("https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1800&q=88") center 48% / cover,
+        #263e30;
+    }
+    .hero-waterwheel {
+      position: absolute;
+      left: 4%;
+      bottom: -65px;
+      z-index: 0;
+      width: clamp(200px, 29vw, 340px);
+      height: auto;
+      color: #f0d59b;
+      opacity: .23;
+      pointer-events: none;
+    }
+    .menu-card {
+      min-height: 0;
+      padding: 0;
+      overflow: hidden;
+      border: 1px solid #e2d7c3;
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: 0 7px 22px rgba(50, 43, 28, .09);
+    }
+    .menu-card::before { display: none; }
+    .menu-card::after {
+      top: 12px;
+      left: 12px;
+      width: 30px;
+      height: 30px;
+      border: 1px solid #e2c991;
+      background: rgba(255, 253, 247, .94);
+      content: "✦";
+      color: var(--orange);
+      font-size: 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+    }
+    .menu-card[data-category]::after { content: "✦"; }
+    .dish-photo {
+      display: block;
+      width: 100%;
+      height: 176px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #d8c8a7, #315342);
+    }
+    .dish-card-body { padding: 15px 16px 17px; }
+    .dish-card-heading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .menu-card h3 { margin: 0; padding: 0; color: var(--green-dark); font-size: 16px; line-height: 1.5; }
+    .price-options { grid-template-columns: repeat(auto-fit, minmax(92px, 1fr)); gap: 7px; }
+    .price-option { border: 1px solid #eadfc9; border-radius: 5px; background: #f7f3e9; }
+    .price-option-label { color: var(--muted); }
+    .price { color: #8c3c2f; font-size: 15px; font-weight: 900; }
+    @media (max-width: 780px) {
+      .hero-waterwheel { left: -5%; bottom: -46px; width: 240px; }
+    }
+    @media (max-width: 540px) {
+      .hero-waterwheel { left: -9%; bottom: -25px; width: 185px; opacity: .18; }
+      .menu-card { min-height: 0; padding: 0; border-radius: 7px; }
+      .dish-photo { height: 112px; }
+      .dish-card-body { padding: 10px 9px 11px; }
+      .dish-card-heading { min-height: 40px; margin-bottom: 7px; }
+      .menu-card h3 { font-size: 12px; line-height: 1.45; }
+      .menu-card::after { top: 7px; left: 7px; width: 24px; height: 24px; font-size: 12px; }
+      .price-options { grid-template-columns: 1fr; gap: 4px; }
+      .price-option { padding: 4px; }
+      .price-option-label { font-size: 9px; }
+      .price { font-size: 12px; }
+    }
   </style>
 </head>
 <body>
@@ -626,8 +702,14 @@
 
   <main class="wrap">
     <section class="hero" aria-labelledby="hero-title">
+      <svg class="hero-waterwheel" viewBox="0 0 200 200" aria-hidden="true">
+        <circle cx="100" cy="100" r="77" fill="none" stroke="currentColor" stroke-width="3"/>
+        <circle cx="100" cy="100" r="14" fill="none" stroke="currentColor" stroke-width="4"/>
+        <path d="M100 23v63m0 28v63m77-77h-63m-28 0H23m131-54-45 45m-18 18-45 45m108 0-45-45m-18-18L45 45" fill="none" stroke="currentColor" stroke-width="3"/>
+        <path d="M100 23 114 9m-14 14L86 9m91 91 14 14m-14-14 14-14m-91 91-14 14m14-14 14 14m-91-91L9 86m14 14L9 114" fill="none" stroke="currentColor" stroke-width="3"/>
+      </svg>
       <div class="hero-content">
-        <span class="eyebrow">أهلًا بكم في مطعمنا</span>
+        <span class="eyebrow">من قلب حماة · نكهة على الأصول</span>
         <div class="hero-logo" role="img" aria-label="شعار مطعم روابي حماه للمأكولات والمشاوي">
           <svg class="hero-logo-mark" viewBox="0 0 120 120" aria-hidden="true">
             <path d="M60 5 71 13 85 11 92 23 105 29 105 43 115 54 110 67 113 81 101 90 96 104 82 106 71 116 58 111 44 115 35 104 21 100 19 86 8 76 12 62 5 50 14 38 14 24 28 19 37 7 51 10Z" fill="#203d30" stroke="#e8c98f" stroke-width="2.5"/>
@@ -639,7 +721,7 @@
             <circle cx="60" cy="103" r="2" fill="#e8c98f"/>
           </svg>
           <span class="hero-logo-copy">
-            <span class="hero-logo-name">روابي حماه</span>
+            <span class="hero-logo-name" id="hero-title">روابي حماه</span>
             <span class="hero-logo-caption">مطعم ومشويات</span>
             <span class="hero-logo-place">حكاية الشام على مائدتكم</span>
           </span>
@@ -891,6 +973,24 @@
       { id: "hot-kibbeh-grilled", category: "hot", name: "كبة مشوية" },
       { id: "hot-kibbeh-fried", category: "hot", name: "كبة مقلية" }
     ];
+    const categoryImages = {
+      meat: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80",
+      chicken: "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=800&q=80",
+      shawarma: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80",
+      western: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80",
+      pastries: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=800&q=80",
+      cold: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80",
+      hot: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=800&q=80"
+    };
+    const categoryNames = {
+      meat: "المشاوي",
+      chicken: "الفروج",
+      shawarma: "الشاورما",
+      western: "الأطباق الغربية",
+      pastries: "المعجنات",
+      cold: "المقبلات الباردة",
+      hot: "المقبلات الساخنة"
+    };
     let activeCategory = "all";
     let editingPrices = false;
 
@@ -941,8 +1041,20 @@
         card.dataset.category = item.category;
         card.dataset.search = `${item.name} ${(item.variants || []).join(" ")}`.toLocaleLowerCase("ar");
 
+        const image = document.createElement("img");
+        image.className = "dish-photo";
+        image.src = categoryImages[item.category];
+        image.alt = `${item.name} - صورة توضيحية من فئة ${categoryNames[item.category]}`;
+        image.loading = "lazy";
+        image.decoding = "async";
+
+        const body = document.createElement("div");
+        body.className = "dish-card-body";
+        const cardHeading = document.createElement("div");
+        cardHeading.className = "dish-card-heading";
         const heading = document.createElement("h3");
         heading.textContent = item.name;
+        cardHeading.append(heading);
         const options = document.createElement("div");
         options.className = "price-options";
 
@@ -964,7 +1076,8 @@
           options.append(option);
         });
 
-        card.append(heading, options);
+        body.append(cardHeading, options);
+        card.append(image, body);
         dishGrid.append(card);
       });
     }
