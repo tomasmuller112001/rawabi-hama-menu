@@ -350,6 +350,32 @@
     }
     .hero::after { inset: 14px; border: 1px solid rgba(232, 201, 143, .7); border-radius: 132px 4px 4px 4px; }
     .hero-content { max-width: 650px; padding: 68px 72px; }
+    .hero-logo {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      width: fit-content;
+      margin-bottom: 22px;
+      padding: 15px 22px 15px 26px;
+      border: 1px solid rgba(232, 201, 143, .7);
+      border-radius: 4px 34px 4px 34px;
+      background: linear-gradient(115deg, rgba(20, 43, 31, .45), rgba(20, 43, 31, .82));
+      box-shadow: 0 12px 35px rgba(0, 0, 0, .2), inset 0 0 24px rgba(232, 201, 143, .08);
+      backdrop-filter: blur(5px);
+    }
+    .hero-logo-mark { display: block; width: 96px; height: 96px; flex: 0 0 96px; filter: drop-shadow(0 5px 10px rgba(0, 0, 0, .25)); }
+    .hero-logo-copy { display: flex; flex-direction: column; align-items: flex-start; }
+    .hero-logo-name {
+      color: #fff7e4;
+      font-family: var(--serif);
+      font-size: clamp(36px, 5vw, 58px);
+      font-weight: 800;
+      letter-spacing: .02em;
+      line-height: 1.2;
+      text-shadow: 0 3px 18px rgba(0, 0, 0, .3);
+    }
+    .hero-logo-caption { margin-top: 3px; color: #e8c98f; font-size: 15px; font-weight: 700; letter-spacing: .12em; }
+    .hero-logo-place { margin-top: 9px; color: #eee9dc; font-size: 12px; letter-spacing: .04em; }
     .hero h1 { font-size: clamp(48px, 6.4vw, 76px); text-shadow: 0 3px 18px rgba(0, 0, 0, .25); }
     .eyebrow { font-size: 13px; }
     .primary-link { border-radius: 3px 18px 3px 18px; box-shadow: 0 8px 24px rgba(0, 0, 0, .18); }
@@ -470,7 +496,11 @@
       .hero::before { width: 56%; }
       .hero::after { inset: 8px; border-radius: 78px 3px 3px 3px; }
       .hero-content { padding: 44px 23px; }
-      .hero h1 { font-size: clamp(38px, 10vw, 52px); }
+      .hero-logo { gap: 11px; margin-bottom: 18px; padding: 10px 13px; border-radius: 3px 24px 3px 24px; }
+      .hero-logo-mark { width: 68px; height: 68px; flex-basis: 68px; }
+      .hero-logo-name { font-size: clamp(31px, 8vw, 42px); }
+      .hero-logo-caption { font-size: 12px; }
+      .hero-logo-place { margin-top: 5px; font-size: 10px; }
       .hero p { max-width: 320px; font-size: 13px; }
       .hero-actions { align-items: flex-start; flex-direction: column; gap: 11px; }
       .highlights { margin: 17px 0 55px; padding: 17px 3px; border-radius: 3px 22px 3px 22px; }
@@ -555,7 +585,22 @@
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-content">
         <span class="eyebrow">أهلًا بكم في مطعمنا</span>
-        <h1 id="hero-title">نكهات تحكي<br>حكاية بيت</h1>
+        <div class="hero-logo" role="img" aria-label="شعار مطعم روابي حماه للمأكولات والمشاوي">
+          <svg class="hero-logo-mark" viewBox="0 0 120 120" aria-hidden="true">
+            <path d="M60 5 71 13 85 11 92 23 105 29 105 43 115 54 110 67 113 81 101 90 96 104 82 106 71 116 58 111 44 115 35 104 21 100 19 86 8 76 12 62 5 50 14 38 14 24 28 19 37 7 51 10Z" fill="#203d30" stroke="#e8c98f" stroke-width="2.5"/>
+            <circle cx="60" cy="60" r="43" fill="none" stroke="#e8c98f" stroke-width="1.5"/>
+            <path d="M34 77V59a26 26 0 0 1 52 0v18M30 79h60M39 83h42" fill="none" stroke="#fff4d7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+            <path d="M48 70c-5-8 5-10 0-18m12 18c-5-8 5-10 0-18m12 18c-5-8 5-10 0-18" fill="none" stroke="#d8a85e" stroke-linecap="round" stroke-width="3"/>
+            <path d="M43 91h34M48 96h24" fill="none" stroke="#e8c98f" stroke-linecap="round" stroke-width="2"/>
+            <circle cx="60" cy="27" r="2" fill="#e8c98f"/>
+            <circle cx="60" cy="103" r="2" fill="#e8c98f"/>
+          </svg>
+          <span class="hero-logo-copy">
+            <span class="hero-logo-name">روابي حماه</span>
+            <span class="hero-logo-caption">مطعم ومشويات</span>
+            <span class="hero-logo-place">حكاية الشام على مائدتكم</span>
+          </span>
+        </div>
         <p>مكونات طازجة، وصفات نحبّها، وأطباق تُحضّر كل يوم لتجمعكم حول مائدة شهية.</p>
         <div class="hero-actions">
           <a class="primary-link" href="#menu">اكتشفوا قائمتنا <span aria-hidden="true">←</span></a>
