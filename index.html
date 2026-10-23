@@ -469,6 +469,49 @@
     .price { color: #f4d38d; font-size: 14px; }
     .visit { box-shadow: 0 12px 28px rgba(55, 48, 32, .08); }
     footer { margin-top: 20px; background: var(--green-dark); color: #e7dfca; }
+    .whatsapp-float {
+      position: fixed;
+      right: max(20px, calc((100vw - 1120px) / 2));
+      bottom: max(20px, env(safe-area-inset-bottom));
+      z-index: 20;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 58px;
+      padding: 10px 20px 10px 16px;
+      border: 2px solid rgba(255, 255, 255, .88);
+      border-radius: 999px;
+      background: #168c4b;
+      box-shadow: 0 8px 28px rgba(10, 68, 38, .32);
+      color: white;
+      font-size: 14px;
+      font-weight: 800;
+      transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+      animation: whatsapp-arrive .55s ease-out both;
+    }
+    .whatsapp-float:hover {
+      transform: translateY(-3px);
+      background: #11743d;
+      box-shadow: 0 12px 32px rgba(10, 68, 38, .4);
+    }
+    .whatsapp-float svg { width: 30px; height: 30px; flex: 0 0 30px; fill: currentColor; }
+    .whatsapp-float:focus-visible { outline-color: #f4d38d; }
+    @keyframes whatsapp-arrive {
+      from { opacity: 0; transform: translateY(12px) scale(.94); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @media (max-width: 540px) {
+      .whatsapp-float {
+        right: 16px;
+        bottom: max(16px, env(safe-area-inset-bottom));
+        min-height: 56px;
+        padding: 10px 17px 10px 14px;
+        font-size: 13px;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .whatsapp-float { animation: none; }
+    }
 
     @media (max-width: 780px) {
       .topbar { padding-inline: 22px; }
@@ -672,6 +715,19 @@
       </div>
     </section>
   </main>
+
+  <a
+    class="whatsapp-float"
+    href="https://wa.me/963935561891?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%B7%D9%84%D8%A8%20%D9%85%D9%86%20%D9%85%D8%B7%D8%B9%D9%85%20%D8%B1%D9%88%D8%A7%D8%A8%D9%8A%20%D8%AD%D9%85%D8%A7%D9%87."
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="اطلب عبر واتساب من مطعم روابي حماه"
+  >
+    <svg viewBox="0 0 32 32" aria-hidden="true">
+      <path d="M16 .8A15 15 0 0 0 3.1 23.5L1 31l7.7-2A15.1 15.1 0 1 0 16 .8Zm0 27.4c-2.3 0-4.5-.6-6.4-1.8l-.5-.3-4.6 1.2 1.2-4.5-.3-.5A12.3 12.3 0 1 1 16 28.2Zm6.8-9.2c-.4-.2-2.3-1.2-2.7-1.3-.4-.2-.6-.2-.9.2s-1 1.3-1.2 1.5c-.2.3-.5.3-.9.1s-1.7-.6-3.2-2a11.8 11.8 0 0 1-2.2-2.7c-.2-.4 0-.6.2-.8l.6-.7c.2-.2.3-.4.4-.6.2-.3.1-.5 0-.7l-1.2-2.9c-.3-.7-.6-.6-.9-.6h-.8c-.3 0-.7.1-1.1.5-.4.4-1.4 1.4-1.4 3.3s1.5 3.8 1.7 4.1c.2.3 2.9 4.4 6.9 6.1 1 .4 1.8.7 2.4.8 1 .3 1.9.2 2.6.1.8-.1 2.3-.9 2.6-1.8.3-.9.3-1.7.2-1.8-.1-.2-.4-.3-.8-.5Z"/>
+    </svg>
+    <span>اطلب عبر واتساب</span>
+  </a>
 
   <footer>
     <div class="wrap footer-inner">
