@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f7f4ed">
+  <meta name="theme-color" content="#203d30">
   <meta name="description" content="قائمة مطعم ومشويات روابي حماه.">
   <title>مطعم ومشويات روابي حماه | قائمة الطعام</title>
   <style>
@@ -301,6 +301,201 @@
     footer { padding: 22px 0; border-top: 1px solid #d8c8a7; color: var(--muted); font-size: 11px; }
     .footer-inner { display: flex; justify-content: space-between; gap: 16px; }
 
+    body { background-size: 26px 26px; }
+    .topbar {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: none;
+      min-height: 96px;
+      padding-inline: max(24px, calc((100% - 1120px) / 2));
+      background: var(--green-dark);
+      box-shadow: 0 5px 20px rgba(24, 42, 32, .16);
+    }
+    .topbar::after {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 4px;
+      background: repeating-linear-gradient(90deg, var(--gold) 0 18px, #a84839 18px 24px, var(--gold) 24px 42px, transparent 42px 48px);
+      content: "";
+    }
+    .brand-mark { border-color: #e4c17f; box-shadow: 0 0 0 4px rgba(232, 201, 143, .13); }
+    .brand-name { color: #fffdf7; }
+    .brand-name small { color: #d8c8a7; }
+    .nav { color: #f2eee3; }
+    .nav a:hover { color: #e8c98f; }
+    .nav-cta { border-color: #d7b875; color: #f2d99f; }
+    .nav-cta:hover { background: #d7b875; color: var(--green-dark); }
+    .hero {
+      min-height: 500px;
+      margin-top: 26px;
+      border: 5px solid var(--paper);
+      border-radius: 150px 12px 12px 12px;
+      box-shadow: 0 18px 46px rgba(43, 48, 34, .18);
+      background:
+        linear-gradient(90deg, rgba(22, 39, 29, .08) 0%, rgba(22, 39, 29, .89) 72%),
+        url("https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1800&q=85") center 48% / cover,
+        #263e30;
+    }
+    .hero::before {
+      inset: 0 auto 0 0;
+      width: 42%;
+      background:
+        repeating-linear-gradient(45deg, transparent 0 16px, rgba(232, 201, 143, .15) 16px 18px, transparent 18px 34px),
+        repeating-linear-gradient(-45deg, transparent 0 16px, rgba(232, 201, 143, .12) 16px 18px, transparent 18px 34px);
+      opacity: .85;
+      mask-image: linear-gradient(90deg, #000 0%, transparent 100%);
+    }
+    .hero::after { inset: 14px; border: 1px solid rgba(232, 201, 143, .7); border-radius: 132px 4px 4px 4px; }
+    .hero-content { max-width: 650px; padding: 68px 72px; }
+    .hero h1 { font-size: clamp(48px, 6.4vw, 76px); text-shadow: 0 3px 18px rgba(0, 0, 0, .25); }
+    .eyebrow { font-size: 13px; }
+    .primary-link { border-radius: 3px 18px 3px 18px; box-shadow: 0 8px 24px rgba(0, 0, 0, .18); }
+    .highlights {
+      overflow: hidden;
+      margin: 24px 0 82px;
+      padding: 24px 12px;
+      border: 1px solid #c39a55;
+      border-radius: 4px 34px 4px 34px;
+      background:
+        linear-gradient(120deg, rgba(32, 61, 48, .97), rgba(49, 83, 66, .97)),
+        var(--green-dark);
+      box-shadow: 0 12px 28px rgba(32, 61, 48, .12);
+    }
+    .highlights::before, .highlights::after { border-color: #e8c98f; background: var(--green-dark); }
+    .highlight + .highlight { border-color: rgba(232, 201, 143, .3); }
+    .highlight-icon { color: #e8c98f; }
+    .highlight strong { color: #fffdf7; }
+    .highlight span:last-child { color: #e0ddcf; }
+    .menu-section {
+      position: relative;
+      padding: 34px;
+      border: 1px solid #dfd3b8;
+      border-radius: 6px 48px 6px 6px;
+      background: rgba(255, 253, 247, .8);
+      box-shadow: 0 14px 38px rgba(55, 48, 32, .055);
+    }
+    .section-heading { align-items: center; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+    .section-heading h2 { font-size: 44px; }
+    .section-heading h2::after { width: 100%; height: 3px; }
+    .section-heading > div:first-child::after {
+      display: block;
+      margin-top: 16px;
+      color: var(--gold);
+      content: "✦  ✦  ✦";
+      font-size: 12px;
+      letter-spacing: 8px;
+    }
+    .search { width: 260px; border-radius: 3px 14px 3px 14px; }
+    .edit-prices { border-radius: 3px 12px 3px 12px; }
+    .filters { gap: 10px; margin-top: 24px; }
+    .filter {
+      padding: 10px 16px;
+      border-color: #d7c9ac;
+      border-radius: 3px 12px 3px 12px;
+      background: #f5f0e4;
+      color: var(--green-dark);
+      font-weight: 700;
+    }
+    .filter:hover { border-color: var(--orange); background: #f0e4d4; }
+    .filter.active { border-color: var(--green-dark); background: var(--green-dark); box-shadow: 0 4px 12px rgba(32, 61, 48, .18); }
+    .grid { gap: 18px; }
+    .menu-card {
+      min-height: 126px;
+      padding: 20px;
+      overflow: hidden;
+      border: 1px solid #67806c;
+      border-radius: 4px 24px 4px 4px;
+      background:
+        radial-gradient(circle at 0 0, rgba(195, 154, 85, .22), transparent 38%),
+        linear-gradient(145deg, #315342, #203d30);
+      box-shadow: 0 9px 20px rgba(32, 61, 48, .18);
+    }
+    .menu-card::before { top: 0; right: 0; width: 6px; height: 100%; background: linear-gradient(180deg, #e8c98f, #a84839); }
+    .menu-card::after {
+      position: absolute;
+      top: 12px;
+      left: 14px;
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border: 2px solid #e8c98f;
+      border-radius: 50%;
+      background: #a84839;
+      content: "✦";
+      color: #fff5dc;
+      font-size: 19px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .18);
+    }
+    .menu-card[data-category="meat"]::after { content: "🍢"; }
+    .menu-card[data-category="chicken"]::after { content: "🍗"; }
+    .menu-card[data-category="shawarma"]::after { content: "🥙"; }
+    .menu-card[data-category="western"]::after { content: "🍔"; }
+    .menu-card[data-category="pastries"]::after { content: "🥟"; }
+    .menu-card[data-category="cold"]::after { content: "🥗"; }
+    .menu-card[data-category="hot"]::after { content: "🍟"; }
+    .menu-card h3 { padding-left: 48px; color: #fffdf7; font-size: 17px; }
+    .price-option { border: 1px solid rgba(232, 201, 143, .3); border-radius: 3px 10px 3px 3px; background: rgba(255, 253, 247, .1); }
+    .price-option-label { color: #e6dfd0; }
+    .price { color: #f4d38d; font-size: 14px; }
+    .visit { box-shadow: 0 12px 28px rgba(55, 48, 32, .08); }
+    footer { margin-top: 20px; background: var(--green-dark); color: #e7dfca; }
+
+    @media (max-width: 780px) {
+      .topbar { padding-inline: 22px; }
+      .hero { min-height: 430px; }
+      .menu-section { padding: 25px; }
+      .section-heading { align-items: stretch; }
+      .menu-tools { gap: 9px; }
+      .search { width: 100%; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 540px) {
+      .topbar { min-height: 80px; padding-inline: 15px; }
+      .brand { gap: 9px; }
+      .brand-mark { width: 50px; height: 50px; flex-basis: 50px; }
+      .brand-name { font-size: 17px; }
+      .nav { gap: 8px; }
+      .nav-cta { padding: 7px 10px; font-size: 11px; }
+      .hero {
+        min-height: 440px;
+        margin-top: 16px;
+        border-width: 3px;
+        border-radius: 88px 8px 8px 8px;
+        background-position: 42% center;
+      }
+      .hero::before { width: 56%; }
+      .hero::after { inset: 8px; border-radius: 78px 3px 3px 3px; }
+      .hero-content { padding: 44px 23px; }
+      .hero h1 { font-size: clamp(38px, 10vw, 52px); }
+      .hero p { max-width: 320px; font-size: 13px; }
+      .hero-actions { align-items: flex-start; flex-direction: column; gap: 11px; }
+      .highlights { margin: 17px 0 55px; padding: 17px 3px; border-radius: 3px 22px 3px 22px; }
+      .highlight { gap: 5px; padding-inline: 3px; }
+      .highlight-icon { font-size: 18px; }
+      .highlight strong { font-size: 10px; }
+      .highlight span:last-child { font-size: 8px; }
+      .menu-section { width: calc(100% - 28px); padding: 18px 13px; border-radius: 4px 30px 4px 4px; }
+      .section-heading { gap: 16px; margin-bottom: 17px; padding-bottom: 16px; }
+      .section-heading h2 { font-size: 35px; }
+      .section-heading > div:first-child::after { margin-top: 10px; }
+      .menu-tools { gap: 8px; }
+      .filters { gap: 7px; margin-top: 18px; margin-bottom: 19px; }
+      .filter { padding: 8px 10px; font-size: 11px; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+      .menu-card { min-height: 108px; padding: 14px 12px; border-radius: 3px 16px 3px 3px; }
+      .menu-card::after { top: 8px; left: 8px; width: 26px; height: 26px; font-size: 13px; }
+      .menu-card h3 { min-height: 42px; margin-bottom: 8px; padding-left: 25px; font-size: 13px; line-height: 1.55; }
+      .price-options { grid-template-columns: 1fr; gap: 4px; }
+      .price-option { padding: 5px 4px; }
+      .price-option-label { font-size: 9px; }
+      .price { font-size: 11px; }
+      .visit { border-radius: 4px 30px 4px 4px; }
+    }
+
     @media (max-width: 780px) {
       .nav { gap: 17px; }
       .hero { min-height: 365px; }
@@ -326,8 +521,14 @@
       .highlight strong { font-size: 11px; }
       .highlight span:last-child { font-size: 9px; }
       .section-heading h2 { font-size: 33px; }
-      .grid { grid-template-columns: 1fr; gap: 10px; }
-      .menu-card { padding: 14px; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+      .menu-card { min-height: 108px; padding: 14px 12px; border-radius: 3px 16px 3px 3px; }
+      .menu-card::after { top: 8px; left: 8px; width: 26px; height: 26px; font-size: 13px; }
+      .menu-card h3 { min-height: 42px; margin-bottom: 8px; padding-left: 25px; font-size: 13px; line-height: 1.55; }
+      .price-options { grid-template-columns: 1fr; gap: 4px; }
+      .price-option { padding: 5px 4px; }
+      .price-option-label { font-size: 9px; }
+      .price { font-size: 11px; }
       .visit { align-items: start; flex-direction: column; margin-bottom: 38px; padding: 23px; border-radius: 4px 38px 4px 4px; }
       .visit-details { flex-direction: column; gap: 5px; }
       .footer-inner { flex-direction: column; gap: 3px; }
